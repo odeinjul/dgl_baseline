@@ -188,7 +188,7 @@ def train(
         train_idx,
         sampler,
         device=device,
-        batch_size=1024,
+        batch_size=1000,
         shuffle=True,
         drop_last=False,
         num_workers=args.num_workers,
@@ -200,7 +200,7 @@ def train(
         val_idx,
         sampler,
         device=device,
-        batch_size=1024,
+        batch_size=1000,
         shuffle=True,
         drop_last=False,
         num_workers=args.num_workers,
@@ -374,10 +374,11 @@ if __name__ == "__main__":
     # Load and preprocess the dataset.
     print("Loading data")
     dataset = load_graphs(
-        f"/home/ubuntu/workspace/partition_dataset/mag240m_undirected_graph.dgl"
+        f"/home/ubuntu/workspace/partition_dataset/{args.dataset_name}_undirected_graph.dgl"
     )
 
     g = dataset[0][0]
+    print(g)
     if args.dataset_name == "mag240m":
         g.ndata["features"] = random((g.num_nodes, )).reshape(-1,
                                                               1).repeat(768)
