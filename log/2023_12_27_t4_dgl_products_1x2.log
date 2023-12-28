@@ -1,0 +1,30 @@
+python3.10  multigpu.py --dataset_name ogb-products --mode mixed --gpu "0,1" --num_epochs 20 --hidden_dim 3
+2
+Training in mixed mode using 2 GPU(s)
+Loading data
+Training...
+Epoch 00000 | Loss 4.4893 | Accuracy 0.5413 | Time 11.1644| Throughput 44999.7061
+Epoch 00001 | Loss 1.9763 | Accuracy 0.6836 | Time 10.2987| Throughput 45039.0171
+Epoch 00002 | Loss 1.3774 | Accuracy 0.7471 | Time 10.3144| Throughput 45091.4221
+Epoch 00003 | Loss 1.1132 | Accuracy 0.7893 | Time 10.3153| Throughput 45077.9635
+Epoch 00004 | Loss 0.9463 | Accuracy 0.8170 | Time 10.2937| Throughput 45100.2559
+Epoch 00005 | Loss 0.8383 | Accuracy 0.8336 | Time 10.3147| Throughput 45099.6438
+Epoch 00006 | Loss 0.7583 | Accuracy 0.8427 | Time 10.2943| Throughput 45113.6722
+Epoch 00007 | Loss 0.7074 | Accuracy 0.8495 | Time 10.3113| Throughput 45108.6995
+Epoch 00008 | Loss 0.6723 | Accuracy 0.8550 | Time 10.2781| Throughput 45106.9554
+Epoch 00009 | Loss 0.6397 | Accuracy 0.8592 | Time 10.0397| Throughput 46520.9312
+Epoch 00010 | Loss 0.6155 | Accuracy 0.8630 | Time 9.9911| Throughput 47994.9839
+Epoch 00011 | Loss 0.5981 | Accuracy 0.8665 | Time 9.9793| Throughput 49266.0580
+Epoch 00012 | Loss 0.5879 | Accuracy 0.8694 | Time 9.9969| Throughput 50316.7474
+Epoch 00013 | Loss 0.5717 | Accuracy 0.8690 | Time 9.9887| Throughput 51216.4831
+Epoch 00014 | Loss 0.5600 | Accuracy 0.8712 | Time 9.9809| Throughput 52018.1874
+Epoch 00015 | Loss 0.5560 | Accuracy 0.8734 | Time 9.9996| Throughput 52684.4552
+Epoch 00016 | Loss 0.5414 | Accuracy 0.8732 | Time 10.1047| Throughput 52975.7213
+Epoch 00017 | Loss 0.5298 | Accuracy 0.8755 | Time 10.2522| Throughput 52633.3138
+Epoch 00018 | Loss 0.5256 | Accuracy 0.8766 | Time 10.2250| Throughput 52315.7607
+Epoch 00019 | Loss 0.5273 | Accuracy 0.8778 | Time 10.2841| Throughput 52019.2237
+Throughput 100361.7789
+100%|█████████████████████████████████████████████| 1196/1196 [00:10<00:00, 117.19it/s]
+100%|█████████████████████████████████████████████| 1196/1196 [00:06<00:00, 197.22it/s]
+100%|█████████████████████████████████████████████| 1196/1196 [00:06<00:00, 198.98it/s]
+Test accuracy 0.7123
