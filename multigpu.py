@@ -176,7 +176,7 @@ def train(
     model,
     use_uva,
 ):
-    log_path = f"./logs/2023_12_28_t4_dgl_{args.dataset_name}_1x{nprocs}.log"
+    log_path = f"../logs/2023_12_28_t4_dgl_{args.dataset_name}_1x{nprocs}.log"
     # Instantiate a neighbor sampler
     sampler = NeighborSampler(
         [10, 10, 10],
@@ -248,7 +248,7 @@ def train(
             print(f"Epoch {epoch:05d} | Loss {total_loss / (it + 1):.4f} | "
                   f"Accuracy {acc.item():.4f} | Time {t1 - t0:.4f}"
                   f"| Throughput {np.mean(iter_tput[3:]):.4f}")
-            with open(log_path, "a") as f:
+            with open(log_path, "w") as f:
                 f.write(
                     f"Epoch {epoch:05d} | Loss {total_loss / (it + 1):.4f} | "
                     f"Accuracy {acc.item():.4f} | Time {t1 - t0:.4f}"
@@ -258,11 +258,11 @@ def train(
     dist.reduce(tensor=tensor_iter, dst=0)
     if proc_id == 0:
         print(f"Throughput {tensor_iter:.4f}")
-        with open(log_path, "a") as f:
+        with open(log_path, "w") as f:
             f.write(f"Throughput {tensor_iter:.4f}\n")
 
 
-def run(proc_id, nprocs, devices, g, data, args):
+def run(proc_id, nprocs, devices, g, args):
     # Find corresponding device for current process.
     device = devices[proc_id]
     torch.cuda.set_device(device)
@@ -288,12 +288,18 @@ def run(proc_id, nprocs, devices, g, data, args):
         world_size=nprocs,
         rank=proc_id,
     )
-    num_classes, train_idx, val_idx, test_idx = data
+    num_classes = g.ndata["labels"].max().item() + 1
+    train_idx = g.ndata.pop("train_mask").nonzero().squeeze()
+    val_idx = g.ndata.pop("val_mask").nonzero().squeeze()
+    test_idx = g.ndata.pop("test_mask").nonzero().squeeze()
     if args.mode != "benchmark":
         train_idx = train_idx.to(device)
         val_idx = val_idx.to(device)
         g = g.to(device if args.mode == "puregpu" else "cpu")
     in_size = g.ndata["features"].shape[1]
+    if args.dataset_name == "ogb-paper100M":
+        num_classes = 172
+    # print(in_size, num_classes)
     model = SAGE(in_size, args.hidden_dim, num_classes).to(device)
     model = DistributedDataParallel(model,
                                     device_ids=[device],
@@ -388,10 +394,9 @@ if __name__ == "__main__":
 
     g = dataset[0][0]
     print(g)
+    print(g.ndata["labels"])
     if args.dataset_name == "mag240m":
         g.ndata["features"] = np.random.rand(g.num_nodes(), 1).reshape(-1, 1).repeat(768, axis=1)
-    #g.ndata['feat'] = g.ndata.pop("features")
-    #g.ndata['label'] = g.ndata.pop("labels")
     # Explicitly create desired graph formats before multi-processing to avoid
     # redundant creation in each sub-process and to save memory.
     g.create_formats_()
@@ -401,16 +406,10 @@ if __name__ == "__main__":
     # Thread limiting to avoid resource competition.
     os.environ["OMP_NUM_THREADS"] = str(mp.cpu_count() // 2 // nprocs)
     print("Preparing data")
-    data = (
-        (g.ndata["labels"].max() + 1).item(),
-        g.ndata["train_mask"].nonzero().squeeze(),
-        g.ndata["val_mask"].nonzero().squeeze(),
-        g.ndata["test_mask"].nonzero().squeeze(),
-    )
 
     # To use DDP with n GPUs, spawn up n processes.
     mp.spawn(
         run,
-        args=(nprocs, devices, g, data, args),
+        args=(nprocs, devices, g, args),
         nprocs=nprocs,
     )
