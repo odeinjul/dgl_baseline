@@ -176,6 +176,7 @@ def train(
     model,
     use_uva,
 ):
+    log_path = f"./logs/2023_12_28_t4_dgl_{args.dataset_name}_1x{nprocs}.log"
     # Instantiate a neighbor sampler
     sampler = NeighborSampler(
         [10, 10, 10],
@@ -247,11 +248,18 @@ def train(
             print(f"Epoch {epoch:05d} | Loss {total_loss / (it + 1):.4f} | "
                   f"Accuracy {acc.item():.4f} | Time {t1 - t0:.4f}"
                   f"| Throughput {np.mean(iter_tput[3:]):.4f}")
+            with open(log_path, "a") as f:
+                f.write(
+                    f"Epoch {epoch:05d} | Loss {total_loss / (it + 1):.4f} | "
+                    f"Accuracy {acc.item():.4f} | Time {t1 - t0:.4f}"
+                    f"| Throughput {np.mean(iter_tput[3:]):.4f}\n")
     tmp_iter = np.mean(iter_tput[3:])
     tensor_iter = torch.tensor(np.mean(iter_tput[3:])).to(device)
     dist.reduce(tensor=tensor_iter, dst=0)
     if proc_id == 0:
         print(f"Throughput {tensor_iter:.4f}")
+        with open(log_path, "a") as f:
+            f.write(f"Throughput {tensor_iter:.4f}\n")
 
 
 def run(proc_id, nprocs, devices, g, data, args):
@@ -316,6 +324,7 @@ def run(proc_id, nprocs, devices, g, data, args):
 
     # Cleanup the process group.
     dist.destroy_process_group()
+
 
 
 if __name__ == "__main__":
