@@ -84,7 +84,7 @@ class SAGE(nn.Module):
         return h
 
     def inference(self, g, device, batch_size, use_uva):
-        g.ndata["h"] = g.ndata["feat"]
+        g.ndata["h"] = g.ndata["features"]
         sampler = MultiLayerFullNeighborSampler(1, prefetch_node_feats=["h"])
         for l, layer in enumerate(self.layers):
             dataloader = DataLoader(
@@ -130,8 +130,8 @@ def evaluate(device, model, g, num_classes, dataloader):
     for it, (input_nodes, output_nodes, blocks) in enumerate(dataloader):
         with torch.no_grad():
             blocks = [block.to(device) for block in blocks]
-            x = blocks[0].srcdata["feat"]
-            ys.append(blocks[-1].dstdata["label"])
+            x = blocks[0].srcdata["features"]
+            ys.append(blocks[-1].dstdata["labels"])
             y_hats.append(model(blocks, x))
     return MF.accuracy(
         torch.cat(y_hats),
@@ -155,7 +155,7 @@ def layerwise_infer(proc_id,
             g = g.to(device)
         pred = model.module.inference(g, device, batch_size, use_uva)
         pred = pred[nid]
-        labels = g.ndata["label"][nid].to(pred.device)
+        labels = g.ndata["labels"][nid].to(pred.device)
     if proc_id == 0:
         acc = MF.accuracy(pred,
                           labels,
@@ -180,8 +180,8 @@ def train(
     # Instantiate a neighbor sampler
     sampler = NeighborSampler(
         [10, 10, 10],
-        prefetch_node_feats=["feat"],
-        prefetch_labels=["label"],
+        prefetch_node_feats=["features"],
+        prefetch_labels=["labels"],
         fused=(args.mode != "benchmark"),
     )
     train_dataloader = DataLoader(
@@ -217,8 +217,8 @@ def train(
         for it, (input_nodes, output_nodes,
                  blocks) in enumerate(train_dataloader):
             time1 = time.time()
-            x = blocks[0].srcdata["feat"]
-            y = blocks[-1].dstdata["label"].to(torch.int64)
+            x = blocks[0].srcdata["features"]
+            y = blocks[-1].dstdata["labels"].to(torch.int64)
             y_hat = model(blocks, x)
             loss = F.cross_entropy(y_hat, y)
             opt.zero_grad()
@@ -293,7 +293,7 @@ def run(proc_id, nprocs, devices, g, data, args):
         train_idx = train_idx.to(device)
         val_idx = val_idx.to(device)
         g = g.to(device if args.mode == "puregpu" else "cpu")
-    in_size = g.ndata["feat"].shape[1]
+    in_size = g.ndata["features"].shape[1]
     model = SAGE(in_size, args.hidden_dim, num_classes).to(device)
     model = DistributedDataParallel(model,
                                     device_ids=[device],
@@ -390,8 +390,8 @@ if __name__ == "__main__":
     print(g)
     if args.dataset_name == "mag240m":
         g.ndata["features"] = np.random.rand(g.num_nodes(), 1).reshape(-1, 1).repeat(768, axis=1)
-    g.ndata['feat'] = g.ndata.pop("features")
-    g.ndata['label'] = g.ndata.pop("labels")
+    #g.ndata['feat'] = g.ndata.pop("features")
+    #g.ndata['label'] = g.ndata.pop("labels")
     # Explicitly create desired graph formats before multi-processing to avoid
     # redundant creation in each sub-process and to save memory.
     g.create_formats_()
@@ -400,8 +400,9 @@ if __name__ == "__main__":
         g = dgl.add_self_loop(g)
     # Thread limiting to avoid resource competition.
     os.environ["OMP_NUM_THREADS"] = str(mp.cpu_count() // 2 // nprocs)
+    print("Preparing data")
     data = (
-        (g.ndata["label"].max() + 1).item(),
+        (g.ndata["labels"].max() + 1).item(),
         g.ndata["train_mask"].nonzero().squeeze(),
         g.ndata["val_mask"].nonzero().squeeze(),
         g.ndata["test_mask"].nonzero().squeeze(),
