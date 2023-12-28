@@ -389,7 +389,7 @@ if __name__ == "__main__":
     g = dataset[0][0]
     print(g)
     if args.dataset_name == "mag240m":
-        g.ndata["features"] = random((g.num_nodes, )).reshape(-1,
+        g.ndata["features"] = random.random((g.num_nodes, )).reshape(-1,
                                                               1).repeat(768)
     g.ndata['feat'] = g.ndata.pop("features")
     g.ndata['label'] = g.ndata.pop("labels")
