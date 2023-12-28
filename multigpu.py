@@ -37,6 +37,7 @@ import argparse
 import os
 import time
 import numpy as np
+import random
 
 import dgl
 import dgl.nn as dglnn
@@ -69,7 +70,7 @@ class SAGE(nn.Module):
         self.layers.append(dglnn.SAGEConv(in_size, hid_size, "mean"))
         self.layers.append(dglnn.SAGEConv(hid_size, hid_size, "mean"))
         self.layers.append(dglnn.SAGEConv(hid_size, out_size, "mean"))
-        self.dropout = nn.Dropout(0.5)
+        self.dropout = nn.Dropout(0.2)
         self.hid_size = hid_size
         self.out_size = out_size
 
@@ -206,7 +207,7 @@ def train(
         use_ddp=True,
         use_uva=use_uva,
     )
-    opt = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
+    opt = torch.optim.Adam(model.parameters(), lr=0.003, weight_decay=5e-4)
     iter_tput = []
     for epoch in range(args.num_epochs):
         t0 = time.time()
@@ -247,11 +248,10 @@ def train(
                   f"Accuracy {acc.item():.4f} | Time {t1 - t0:.4f}"
                   f"| Throughput {np.mean(iter_tput[3:]):.4f}")
     tmp_iter = np.mean(iter_tput[3:])
-    tensor_iter = 
+    tensor_iter = torch.tensor(np.mean(iter_tput[3:])).to(device)
     dist.reduce(tensor=tensor_iter, dst=0)
     if proc_id == 0:
-
-        print(f"| Throughput {np.mean(iter_tput[3:]):.4f}")
+        print(f"Throughput {tensor_iter:.4f}")
 
 
 def run(proc_id, nprocs, devices, g, data, args):
@@ -373,13 +373,14 @@ if __name__ == "__main__":
 
     # Load and preprocess the dataset.
     print("Loading data")
-    print(1)
     dataset = load_graphs(
-        f"/home/ubuntu/workspace/partition_dataset/ogb-products_undirected_graph.dgl"
+        f"/home/ubuntu/workspace/partition_dataset/mag240m_undirected_graph.dgl"
     )
 
     g = dataset[0][0]
-    print(g)
+    if args.dataset_name == "mag240m":
+        g.ndata["features"] = random((g.num_nodes, )).reshape(-1,
+                                                              1).repeat(768)
     g.ndata['feat'] = g.ndata.pop("features")
     g.ndata['label'] = g.ndata.pop("labels")
     # Explicitly create desired graph formats before multi-processing to avoid
