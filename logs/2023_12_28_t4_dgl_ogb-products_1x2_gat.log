@@ -1,0 +1,22 @@
+Epoch 00000 | Loss 6.8028 | Accuracy 0.0748 | Time 12.8040
+Epoch 00001 | Loss 3.3107 | Accuracy 0.3025 | Time 11.8453
+Epoch 00002 | Loss 2.9588 | Accuracy 0.3053 | Time 11.8434
+Epoch 00003 | Loss 2.7712 | Accuracy 0.3077 | Time 11.8253
+Epoch 00004 | Loss 2.6395 | Accuracy 0.3083 | Time 11.8242
+Epoch 00005 | Loss 2.5409 | Accuracy 0.3436 | Time 11.8331
+Epoch 00006 | Loss 2.4130 | Accuracy 0.4032 | Time 11.9923
+Epoch 00007 | Loss 2.2923 | Accuracy 0.4765 | Time 11.8335
+Epoch 00008 | Loss 2.1777 | Accuracy 0.5386 | Time 11.8501
+Epoch 00009 | Loss 2.0406 | Accuracy 0.5736 | Time 11.8532
+Epoch 00010 | Loss 1.9373 | Accuracy 0.5867 | Time 11.8340
+Epoch 00011 | Loss 1.8670 | Accuracy 0.5919 | Time 11.8462
+Epoch 00012 | Loss 1.7979 | Accuracy 0.6077 | Time 11.8470
+Epoch 00013 | Loss 1.7268 | Accuracy 0.6145 | Time 11.8647
+Epoch 00014 | Loss 1.6800 | Accuracy 0.6164 | Time 11.8636
+Epoch 00015 | Loss 1.6401 | Accuracy 0.6341 | Time 11.8329
+Epoch 00016 | Loss 1.6042 | Accuracy 0.6553 | Time 11.8659
+Epoch 00017 | Loss 1.5635 | Accuracy 0.6753 | Time 11.8596
+Epoch 00018 | Loss 1.5306 | Accuracy 0.6716 | Time 11.8132
+Epoch 00019 | Loss 1.5060 | Accuracy 0.6862 | Time 11.8424
+Avg epoch time: 11.897533416748047, Throughput: 16525.6934
+Test accuracy 0.5393

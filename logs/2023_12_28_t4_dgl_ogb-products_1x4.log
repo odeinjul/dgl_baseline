@@ -1,0 +1,31 @@
+python3.10 ../multigpu.py --dataset_name "ogb-products"  --mode mixed --gpu "0,1,2,3" --num_epochs 20 --hidden_dim 32
+Training in mixed mode using 4 GPU(s)
+Loading data
+Preparing data
+Training...
+Epoch 00000 | Loss 2.2588 | Accuracy 0.7431 | Time 6.4100
+Epoch 00001 | Loss 0.8993 | Accuracy 0.8292 | Time 5.9313
+Epoch 00002 | Loss 0.6620 | Accuracy 0.8533 | Time 5.9021
+Epoch 00003 | Loss 0.5794 | Accuracy 0.8642 | Time 5.9336
+Epoch 00004 | Loss 0.5326 | Accuracy 0.8721 | Time 5.9158
+Epoch 00005 | Loss 0.5040 | Accuracy 0.8759 | Time 5.9186
+Epoch 00006 | Loss 0.4805 | Accuracy 0.8780 | Time 5.9347
+Epoch 00007 | Loss 0.4640 | Accuracy 0.8814 | Time 5.9369
+Epoch 00008 | Loss 0.4512 | Accuracy 0.8829 | Time 5.9221
+Epoch 00009 | Loss 0.4445 | Accuracy 0.8829 | Time 5.9189
+Epoch 00010 | Loss 0.4355 | Accuracy 0.8861 | Time 5.9070
+Epoch 00011 | Loss 0.4299 | Accuracy 0.8868 | Time 5.9322
+Epoch 00012 | Loss 0.4214 | Accuracy 0.8888 | Time 5.9339
+Epoch 00013 | Loss 0.4175 | Accuracy 0.8893 | Time 5.9274
+Epoch 00014 | Loss 0.4111 | Accuracy 0.8898 | Time 5.8978
+Epoch 00015 | Loss 0.4086 | Accuracy 0.8907 | Time 5.9266
+Epoch 00016 | Loss 0.4037 | Accuracy 0.8923 | Time 5.9375
+Epoch 00017 | Loss 0.4051 | Accuracy 0.8922 | Time 5.9624
+Epoch 00018 | Loss 0.3971 | Accuracy 0.8924 | Time 5.9266
+Epoch 00019 | Loss 0.3994 | Accuracy 0.8930 | Time 5.9093
+Avg epoch time: 5.963609218597412, Throughput: 32969.12890625
+Testing...
+100%|██████████████████████████████████████████████████████████| 598/598 [00:06<00:00, 93.01it/s]
+100%|█████████████████████████████████████████████████████████| 598/598 [00:03<00:00, 149.52it/s]
+100%|█████████████████████████████████████████████████████████| 598/598 [00:03<00:00, 149.90it/s]
+Test accuracy 0.7363

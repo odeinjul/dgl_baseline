@@ -1,0 +1,35 @@
+python3.10 ../multigpu.py --dataset_name "ogb-products"  --mode mixed --gpu "0,1,2,3,4,5,6,7" --num_epochs 20 --hidden_dim 32
+Training in mixed mode using 8 GPU(s)
+Loading data
+Graph(num_nodes=2449029, num_edges=123718152,
+      ndata_schemes={'test_mask': Scheme(shape=(), dtype=torch.uint8), 'val_mask': Scheme(shape=(), dtype=torch.uint8), 'train_mask': Scheme(shape=(), dtype=torch.uint8), 'labels': Scheme(shape=(), dtype=torch.int64), 'features': Scheme(shape=(100,), dtype=torch.float32)}
+      edata_schemes={})
+tensor([0, 1, 2,  ..., 8, 2, 4])
+Preparing data
+Training...
+Epoch 00000 | Loss 3.4749 | Accuracy 0.5628 | Time 4.5020 | Nodes 24577
+Epoch 00001 | Loss 1.5697 | Accuracy 0.7254 | Time 4.0367 | Nodes 49154
+Epoch 00002 | Loss 1.0879 | Accuracy 0.7917 | Time 3.9452 | Nodes 73731
+Epoch 00003 | Loss 0.8403 | Accuracy 0.8241 | Time 3.9608 | Nodes 98308
+Epoch 00004 | Loss 0.7111 | Accuracy 0.8436 | Time 3.9981 | Nodes 122885
+Epoch 00005 | Loss 0.6482 | Accuracy 0.8536 | Time 3.9932 | Nodes 147462
+Epoch 00006 | Loss 0.5964 | Accuracy 0.8602 | Time 4.0766 | Nodes 172039
+Epoch 00007 | Loss 0.5620 | Accuracy 0.8672 | Time 3.9445 | Nodes 196616
+Epoch 00008 | Loss 0.5359 | Accuracy 0.8706 | Time 4.0182 | Nodes 221193
+Epoch 00009 | Loss 0.5222 | Accuracy 0.8738 | Time 4.0178 | Nodes 245770
+Epoch 00010 | Loss 0.5032 | Accuracy 0.8742 | Time 3.9484 | Nodes 270347
+Epoch 00011 | Loss 0.4915 | Accuracy 0.8775 | Time 3.9952 | Nodes 294924
+Epoch 00012 | Loss 0.4758 | Accuracy 0.8788 | Time 3.9663 | Nodes 319501
+Epoch 00013 | Loss 0.4771 | Accuracy 0.8808 | Time 3.9614 | Nodes 344078
+Epoch 00014 | Loss 0.4626 | Accuracy 0.8810 | Time 4.0141 | Nodes 368655
+Epoch 00015 | Loss 0.4602 | Accuracy 0.8847 | Time 4.0677 | Nodes 393232
+Epoch 00016 | Loss 0.4558 | Accuracy 0.8848 | Time 4.1101 | Nodes 417809
+Epoch 00017 | Loss 0.4468 | Accuracy 0.8858 | Time 4.0845 | Nodes 442386
+Epoch 00018 | Loss 0.4413 | Accuracy 0.8869 | Time 4.0865 | Nodes 466963
+Epoch 00019 | Loss 0.4391 | Accuracy 0.8869 | Time 4.1101 | Nodes 491540
+Avg epoch time: 4.061069488525391, Throughput: 48414.5859375
+Testing...
+100%|██████████████████████████████████████████████████████████| 299/299 [00:04<00:00, 64.94it/s]
+100%|█████████████████████████████████████████████████████████| 299/299 [00:02<00:00, 103.00it/s]
+100%|█████████████████████████████████████████████████████████| 299/299 [00:02<00:00, 103.46it/s]
+Test accuracy 0.7232
